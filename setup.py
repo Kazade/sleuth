@@ -12,7 +12,7 @@ AUTHOR_EMAIL = 'kazade@gmail.com'
 setup(
     name=NAME,
     version='0.1',
-    py_modules=MODULES
+    py_modules=MODULES,
     # metadata for upload to PyPI
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
