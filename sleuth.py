@@ -15,6 +15,8 @@
 #  with sleuth.switch("some.path.to.thing", lambda x: pass) as mock:
 #
 
+import time
+
 def _dot_lookup(thing, comp, import_path):
     try:
         return getattr(thing, comp)
@@ -59,11 +61,13 @@ class Watch(object):
                     (args, kwargs)
                 )
                 wrapped.called = True
+                wrapped.call_times.append(time.time())
                 return _func(*args, **kwargs)
 
             wrapped.call_count = 0
             wrapped.calls = []
             wrapped.called = False
+            wrapped.call_times = []
 
             return wrapped
 
