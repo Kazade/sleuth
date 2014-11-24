@@ -30,3 +30,9 @@ Cause functions to throw exceptions with sleuth.detonate:
         except ValueError:
             pass
 
+Replace functions with a specific return value with sleuth.fake
+
+    with sleuth.fake("some.path.to.thing", return_value=1) as mock:
+        thing(1, a=2)
+
+        self.assertEqual([1], mock.call_returns)

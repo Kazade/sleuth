@@ -120,3 +120,12 @@ class Detonate(Switch):
         super(Detonate, self).__init__(func_path, throw)
 
 detonate = Detonate
+
+class Fake(Switch):
+    def __init__(self, func_path, return_value):
+        def replacement(*args, **kwargs):
+            return return_value
+
+        super(Fake, self).__init__(func_path, replacement)
+
+fake = Fake
