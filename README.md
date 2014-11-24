@@ -20,3 +20,13 @@ Replace functions with sleuth.switch...
         thing(1, a=2)
         self.assertTrue(mock.called)
         self.assertTrue(['something'], mock.call_returns)
+
+
+Cause functions to throw exceptions with sleuth.detonate:
+
+    with sleuth.detonate("some.path.to.thing", exception_class=ValueError):
+        try:
+            thing(1, a=2)
+        except ValueError:
+            pass
+

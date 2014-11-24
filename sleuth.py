@@ -109,3 +109,14 @@ class Switch(object):
         _patch(self._func_path, self._original_func)
 
 switch = Switch
+
+class Detonate(Switch):
+    def __init__(self, func_path, exception_class=None):
+        self._exception = exception_class or Exception
+
+        def throw(*args, **kwargs):
+            raise self._exception("Detonated %s" % func_path)
+
+        super(Detonate, self).__init__(func_path, throw)
+
+detonate = Detonate
