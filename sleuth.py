@@ -62,12 +62,15 @@ class Watch(object):
                 )
                 wrapped.called = True
                 wrapped.call_times.append(time.time())
-                return _func(*args, **kwargs)
+                ret_val = _func(*args, **kwargs)
+                wrapped.call_returns.append(ret_val)
+                return ret_val
 
             wrapped.call_count = 0
             wrapped.calls = []
             wrapped.called = False
             wrapped.call_times = []
+            wrapped.call_returns = []
 
             return wrapped
 
