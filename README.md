@@ -24,7 +24,15 @@ Replace functions with sleuth.switch...
 
 Cause functions to throw exceptions with sleuth.detonate:
 
-    with sleuth.detonate("some.path.to.thing", exception_class=ValueError):
+    with sleuth.detonate("some.path.to.thing", exception=ValueError):
+        try:
+            thing(1, a=2)
+        except ValueError:
+            pass
+
+Or...
+
+    with sleuth.detonate("some.path.to.thing", exception=ValueError("Some custom thingy")):
         try:
             thing(1, a=2)
         except ValueError:

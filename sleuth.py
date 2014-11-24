@@ -111,11 +111,14 @@ class Switch(object):
 switch = Switch
 
 class Detonate(Switch):
-    def __init__(self, func_path, exception_class=None):
-        self._exception = exception_class or Exception
+    def __init__(self, func_path, exception=None):
+        self._exception = exception or Exception
 
         def throw(*args, **kwargs):
-            raise self._exception("Detonated %s" % func_path)
+            if callable(self._exception):
+                raise self._exception("Detonated %s" % func_path)
+            else:
+                raise self._exception
 
         super(Detonate, self).__init__(func_path, throw)
 
