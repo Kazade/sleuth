@@ -16,6 +16,7 @@
 #
 
 import time
+import functools
 
 def _dot_lookup(thing, comp, import_path):
     try:
@@ -41,7 +42,17 @@ def _patch(path, replacement):
     )
     setattr(thing, path.split(".")[-1], replacement)
 
-class Watch(object):
+
+class ContextDecorator(object):
+    def __call__(self, func):
+        @functools.wraps(func)
+        def _wrapped(*args, **kwargs):
+            with self:
+                return func(*args, **kwargs)
+        return _wrapped
+
+
+class Watch(ContextDecorator):
     """
         A context manager that is used to watch a function for calls. It essentially decorates
         the function for the lifetime of the context and records all the calls made to it so that
@@ -87,7 +98,7 @@ class Watch(object):
 watch = Watch
 
 
-class Switch(object):
+class Switch(ContextDecorator):
     """
         Replaces a function specified by a path, with the passed callable. The passed in callable is
         wrapped using the above Watch context manager so that you can also assert that your replacement is
