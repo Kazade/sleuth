@@ -100,9 +100,9 @@ watch = Watch
 
 class Switch(ContextDecorator):
     """
-        Replaces a function specified by a path, with the passed callable. The passed in callable is
-        wrapped using the above Watch context manager so that you can also assert that your replacement is
-        called as you expect.
+        Replaces a function specified by a path, with the passed callable. If the passed in
+        replacement is callable then it is wrapped using the above Watch context manager so that
+        you can also assert that your replacement is called as you expect.
     """
     def __init__(self, func_path, replacement):
         self._original_func = _evaluate_path(func_path)
@@ -112,14 +112,17 @@ class Switch(ContextDecorator):
 
     def __enter__(self):
         _patch(self._func_path, self._replacement)
-        self._watch = watch(self._func_path)
-        return self._watch.__enter__()
+        if callable(self._replacement):
+            self._watch = watch(self._func_path)
+            return self._watch.__enter__()
 
     def __exit__(self, *args, **kwargs):
-        self._watch.__exit__(*args, **kwargs)
+        if self._watch:
+            self._watch.__exit__(*args, **kwargs)
         _patch(self._func_path, self._original_func)
 
 switch = Switch
+
 
 class Detonate(Switch):
     def __init__(self, func_path, exception=None):
