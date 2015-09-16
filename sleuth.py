@@ -17,6 +17,7 @@
 
 import time
 import functools
+import collections
 
 def _dot_lookup(thing, comp, import_path):
     try:
@@ -51,6 +52,7 @@ class ContextDecorator(object):
                 return func(*args, **kwargs)
         return _wrapped
 
+Args = collections.namedtuple('Args', ('args', 'kwargs'))
 
 class Watch(ContextDecorator):
     """
@@ -69,7 +71,7 @@ class Watch(ContextDecorator):
             def wrapped(*args, **kwargs):
                 wrapped.call_count += 1
                 wrapped.calls.append(
-                    (args, kwargs)
+                    Args(args, kwargs)
                 )
                 wrapped.called = True
                 wrapped.call_times.append(time.time())
