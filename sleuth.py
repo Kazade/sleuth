@@ -41,6 +41,7 @@ def _patch(path, replacement):
     thing = _evaluate_path(
         ".".join(path.split(".")[:-1])
     )
+
     setattr(thing, path.split(".")[-1], replacement)
 
 
@@ -110,6 +111,12 @@ class Switch(ContextDecorator):
         self._original_func = _evaluate_path(func_path)
         self._func_path = func_path
         self._replacement = replacement
+
+        # If the original thing we're replacing is a property, make sure
+        # we make the replacement thing a property too
+        if isinstance(self._original_func, property):
+            self._replacement = property(self._replacement)
+
         self._watch = None
 
     def __enter__(self):
