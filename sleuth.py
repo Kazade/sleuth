@@ -133,6 +133,42 @@ class Switch(ContextDecorator):
 switch = Switch
 
 
+class Emplace(ContextDecorator):
+    """
+        Given a list or dictionary, this will temporarily replace the
+        contents without changing the object reference itself.
+    """
+    def __init__(self, obj_path, replacement_values, clear=False):
+        self._clear = clear
+        self._target = _evaluate_path(obj_path)
+        self._original_values = None
+        assert(isinstance(self._target, (list, dict)))
+
+        self._replacement_values = replacement_values
+
+    def __enter__(self):
+        if isinstance(self._target, dict):
+            self._original_values = self._target.copy()
+            if self._clear:
+                self._target.clear()
+            self._target.update(self._replacement_values)
+        else:
+            self._original_values = self._target[:]
+            if self._clear:
+                self._target[:] = self._replacement_values
+            else:
+                self._target.extend(self._replacement_values)
+
+    def __exit__(self, *args, **kwargs):
+        if isinstance(self._target, dict):
+            self._target.clear()
+            self._target.update(self._original_values)
+        else:
+            self._target[:] = self._original_values
+
+emplace = Emplace
+
+
 class Detonate(Switch):
     def __init__(self, func_path, exception=None):
         self._exception = exception or Exception
@@ -155,3 +191,4 @@ class Fake(Switch):
         super(Fake, self).__init__(func_path, replacement)
 
 fake = Fake
+
