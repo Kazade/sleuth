@@ -1,7 +1,7 @@
 import os
 from setuptools import setup
 
-NAME = 'sleuth'
+NAME = 'sleuth-mock'
 MODULES = ['sleuth']
 DESCRIPTION = 'A minimal Python mocking library'
 URL = "https://github.com/kazade/sleuth"
