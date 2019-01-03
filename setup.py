@@ -4,7 +4,7 @@ from setuptools import setup
 NAME = 'sleuth'
 MODULES = ['sleuth']
 DESCRIPTION = 'A minimal Python mocking library'
-URL = "https://github.com/lukebpotato/sleuth"
+URL = "https://github.com/kazade/sleuth"
 LONG_DESCRIPTION = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 AUTHOR = 'Luke Benstead'
 AUTHOR_EMAIL = 'kazade@gmail.com'
