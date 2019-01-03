@@ -15,9 +15,10 @@
 #  with sleuth.switch("some.path.to.thing", lambda x: pass) as mock:
 #
 
-import time
-import functools
 import collections
+import functools
+import time
+
 
 def _dot_lookup(thing, comp, import_path):
     try:
@@ -37,6 +38,7 @@ def _evaluate_path(target):
         thing = _dot_lookup(thing, comp, import_path)
     return thing
 
+
 def _patch(path, replacement):
     thing = _evaluate_path(
         ".".join(path.split(".")[:-1])
@@ -53,7 +55,9 @@ class ContextDecorator(object):
                 return func(*args, **kwargs)
         return _wrapped
 
+
 Args = collections.namedtuple('Args', ('args', 'kwargs'))
+
 
 class Watch(ContextDecorator):
     """
@@ -98,6 +102,7 @@ class Watch(ContextDecorator):
     def __exit__(self, *args, **kwargs):
         _patch(self._func_path, self._original_func)
 
+
 watch = Watch
 
 
@@ -129,6 +134,7 @@ class Switch(ContextDecorator):
         if self._watch:
             self._watch.__exit__(*args, **kwargs)
         _patch(self._func_path, self._original_func)
+
 
 switch = Switch
 
@@ -166,6 +172,7 @@ class Emplace(ContextDecorator):
         else:
             self._target[:] = self._original_values
 
+
 emplace = Emplace
 
 
@@ -181,7 +188,9 @@ class Detonate(Switch):
 
         super(Detonate, self).__init__(func_path, throw)
 
+
 detonate = Detonate
+
 
 class Fake(Switch):
     def __init__(self, func_path, return_value):
@@ -190,5 +199,5 @@ class Fake(Switch):
 
         super(Fake, self).__init__(func_path, replacement)
 
-fake = Fake
 
+fake = Fake
